@@ -12,3 +12,6 @@ gem "sinatra", "~> 2.0"
 gem "sinatra-activerecord", "~> 2.0"
 gem "require_all", "~> 2.0"
 gem "pry", "~> 0.12.2"
+
+gem "rainbow", "~> 3.0"
+gem "tty-prompt", "~> 0.19.0"

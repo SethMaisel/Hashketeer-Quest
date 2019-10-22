@@ -1,0 +1,2 @@
+class CharacterGear
+end 
