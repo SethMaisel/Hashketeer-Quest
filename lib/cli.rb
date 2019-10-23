@@ -1,76 +1,120 @@
 class CLI
-    attr_reader :character, :gear, :villain, :character_gear, :encounter, :prompt
+    attr_accessor :username, :character, :gear_used, :villain, :villain_gear, :villain_gear_used, :character_gear, :encounter, :run_away_chosen
+    attr_reader :prompt
     def initialize()
+        @username = nil
         @character = nil
-        @gear = nil
+        @gear_used = nil
         @villain = nil
+        @villain_gear = nil
+        @villain_gear_used = nil
         @character_gear = nil
         @encounter = nil
+        @run_away_chosen = false
         @prompt = TTY::Prompt.new
     end 
     def welcome
         puts Rainbow("Welcome to Hashkeeter Quest!").color("green")
     end 
+    def create_name_id_hash(original_hash)
+        original_hash.reduce(Hash.new()) do |hash, entry|
+            hash[entry.name] = entry.id
+            hash
+        end 
+    end 
     def select_character
         #user will choose what character to use 
         #character_available will need to contain an array of all the character objects available
-        character_available = ["knight", "peasant", "ogre"]
-        @character = @prompt.select("Please select a character to play?",character_available)
+        character_available = create_name_id_hash(Character.all)
+        character_id = @prompt.select("Please select a character to play?", character_available)
+        self.character = Character.find(character_id)
     end 
     def name_character
-        user_input = @prompt.ask("What would you like to name your character?")
-        #insert user's name choice into Character user_name attribute
+        self.username = @prompt.ask("What would you like to name your character?")
     end 
     def origin_story
-        puts Rainbow("Origin Story based on character").color("green")
+        puts Rainbow(self.character.origin).color("green")
+    end 
+    def set_villain
+        self.villain = Villain.find(self.encounter.villain_id)
+    end 
+    def set_villain_gear
+        self.villain_gear = VillainGear.find_by(villain: self.villain.id)
+    end 
+    def set_villain_gear_used
+        self.villain_gear_used = Gear.find(self.villain_gear.gear_id)
+    end 
+    def set_gear(id)
+        self.gear_used = Gear.find(id)
+    end 
+    def set_character_gear
+        self.character_gear = CharacterGear.find_by(character_id: self.character.id, gear_id: self.gear_used.id)
     end 
     def encounter_story
-        #grab the information from the encounter table 
-        puts Rainbow("Encounter Story").color("green")
+        #grab the encounter via character_id
+        self.encounter = Encounter.find_by(character_id: self.character.id)
+        set_villain
+        set_villain_gear
+        set_villain_gear_used
+        puts Rainbow("Encounter").color("green")
+    end 
+    def add_run_away_option(gear_options)
+        gear_options["Run Away"] = 0
     end 
     def select_gear
-        gear_available = ["sword", "mace", "health postion","run away"]
-        weapon_choice = @prompt.select("What weapon will you use in your encounter with the villain ?", gear_available)
+        character_gear_available = CharacterGear.where(character_id: self.character.id)
+        gears = character_gear_available.map do |character_gear|
+            Gear.find(character_gear.gear_id)
+        end 
+        gear_available = create_name_id_hash(gears)
+        add_run_away_option(gear_available)
+        gear_id = @prompt.select("What weapon will you use in your encounter with the villain ?", gear_available)
+        if gear_id != 0
+            set_gear(gear_id)
+            set_character_gear
+        else 
+            self.run_away_chosen = true
+        end  
     end 
-    def damage_calculation(stats)
-        attackpower = 2
-        weapon_damage = 30
+    def damage_calculation(c_or_v_stats, c_or_v_gear)
+        attackpower = c_or_v_stats.attack_power
+        weapon_damage = c_or_v_gear.damage
         overall_damage = attackpower * weapon_damage
     end 
-    def character_health_calculation(gear_join_table_information, character_stats)
-        gear_health_stats = 0
-        character_health = 100
-        overall_health = character_health + gear_health_stats
+    def character_health_calculation(c_or_v_stats, c_or_v_gear)
+        gear_health_stats = c_or_v_gear.add_health
+        c_or_v_health = c_or_v_stats.health
+        overall_health = c_or_v_health + gear_health_stats
     end 
-    def health_impact(information)
-        overall_health = character_health_calculation("gearinformation", "stats")
-        overall_damage = damage_calculation("information")
+    def health_impact(c_or_v_stats, c_or_v_gear, opponent_stats, opponent_gear)
+        overall_health = character_health_calculation(c_or_v_stats, c_or_v_gear)
+        overall_damage = damage_calculation(opponent_stats, opponent_gear)
         overall_health - overall_damage
     end 
     def run_away
-        puts "You Bravely Ran Away from the villain"
+        puts Rainbow("You Bravely Ran Away from the villain").color("green")
     end 
     def character_wins
-        puts 'You Win'
+        puts Rainbow('You Win').color("green")
         victory_cry = @prompt.ask("What is you victory cry?")
-        puts "Story Line with Victory Cry"
+        puts Rainbow(victory_cry).color("green")
     end 
     def villain_wins
-        puts "villain Wins"
+        puts Rainbow("villain Wins").color("green")
         last_words = @prompt.ask("What are your last words?")
-        puts "Story Line with Last Words"
+        puts Rainbow(last_words).color("green")
     end 
     def villain_character_comparison
-        villain_health = health_impact("stats")
-        character_health = health_impact("stats")
+        villain_health = health_impact(self.villain, self.villain_gear_used, self.character, self.gear_used)
+        character_health = health_impact(self.character, self.gear_used, self.villain, self.villain_gear_used)
         if villain_health > character_health
             villain_wins
         else 
             character_wins
         end 
     end 
-    def gear_consequence(weapon_choice)
-        if weapon_choice == "Run Away"
+    def gear_consequence
+        if self.run_away_chosen == true
             run_away
         else 
             villain_character_comparison

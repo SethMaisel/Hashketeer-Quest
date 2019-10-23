@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_23_142242) do
+ActiveRecord::Schema.define(version: 2019_10_23_172159) do
 
   create_table "character_gears", force: :cascade do |t|
     t.integer "character_id"
@@ -28,17 +28,26 @@ ActiveRecord::Schema.define(version: 2019_10_23_142242) do
   end
 
   create_table "encounters", force: :cascade do |t|
-    t.integer "character_gear_id"
-    t.integer "villain_gear_id"
     t.string "setting"
-    t.index ["character_gear_id"], name: "index_encounters_on_character_gear_id"
-    t.index ["villain_gear_id"], name: "index_encounters_on_villain_gear_id"
+    t.integer "villain_id"
+    t.integer "character_id"
+    t.index ["character_id"], name: "index_encounters_on_character_id"
+    t.index ["villain_id"], name: "index_encounters_on_villain_id"
   end
 
   create_table "gears", force: :cascade do |t|
     t.string "name"
     t.integer "damage"
     t.integer "add_health"
+  end
+
+  create_table "user_choices", force: :cascade do |t|
+    t.integer "encounter_id"
+    t.integer "character_gear_id"
+    t.integer "villain_gear_id"
+    t.index ["character_gear_id"], name: "index_user_choices_on_character_gear_id"
+    t.index ["encounter_id"], name: "index_user_choices_on_encounter_id"
+    t.index ["villain_gear_id"], name: "index_user_choices_on_villain_gear_id"
   end
 
   create_table "villain_gears", force: :cascade do |t|
@@ -57,8 +66,11 @@ ActiveRecord::Schema.define(version: 2019_10_23_142242) do
 
   add_foreign_key "character_gears", "characters"
   add_foreign_key "character_gears", "gears"
-  add_foreign_key "encounters", "character_gears"
-  add_foreign_key "encounters", "villain_gears"
+  add_foreign_key "encounters", "characters"
+  add_foreign_key "encounters", "villains"
+  add_foreign_key "user_choices", "character_gears"
+  add_foreign_key "user_choices", "encounters"
+  add_foreign_key "user_choices", "villain_gears"
   add_foreign_key "villain_gears", "gears"
   add_foreign_key "villain_gears", "villains"
 end
