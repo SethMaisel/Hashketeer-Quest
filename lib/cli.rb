@@ -1,6 +1,6 @@
 class CLI
     attr_accessor :username, :character, :gear_used, :villain, :villain_gear, :villain_gear_used, :character_gear, :encounter, :run_away_chosen
-    attr_reader :prompt
+    PROMPT = TTY::Prompt.new
     def initialize()
         @username = nil
         @character = nil
@@ -11,7 +11,6 @@ class CLI
         @character_gear = nil
         @encounter = nil
         @run_away_chosen = false
-        @prompt = TTY::Prompt.new
     end 
     def welcome
         puts Rainbow("Welcome to Hashkeeter Quest!").color("green")
@@ -26,11 +25,11 @@ class CLI
         #user will choose what character to use 
         #character_available will need to contain an array of all the character objects available
         character_available = create_name_id_hash(Character.all)
-        character_id = self.prompt.select("Please select a character to play?", character_available)
+        character_id = PROMPT.select("Please select a character to play?", character_available)
         self.character = Character.find(character_id)
     end 
     def name_character
-        self.username = self.prompt.ask("What would you like to name your character?")
+        self.username = PROMPT.ask("What would you like to name your character?")
     end 
     def origin_story
         puts Rainbow(self.character.origin).color("green")
@@ -68,7 +67,7 @@ class CLI
         end 
         gear_available = create_name_id_hash(gears)
         add_run_away_option(gear_available)
-        gear_id = self.prompt.select("What weapon will you use in your encounter with the villain ?", gear_available)
+        gear_id = PROMPT.select("What weapon will you use in your encounter with the villain ?", gear_available)
         if gear_id != 0
             set_gear(gear_id)
             set_character_gear
@@ -96,12 +95,12 @@ class CLI
     end 
     def character_wins
         puts Rainbow('You Win').color("green")
-        victory_cry = self.prompt.ask("What is you victory cry?")
+        victory_cry = PROMPT.ask("What is you victory cry?")
         puts Rainbow(victory_cry).color("green")
     end 
     def villain_wins
         puts Rainbow("villain Wins").color("green")
-        last_words = self.prompt.ask("What are your last words?")
+        last_words = PROMPT.ask("What are your last words?")
         puts Rainbow(last_words).color("green")
     end 
     def villain_character_comparison
