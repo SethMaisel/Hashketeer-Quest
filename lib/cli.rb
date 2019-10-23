@@ -103,20 +103,30 @@ class CLI
         last_words = PROMPT.ask("What are your last words?")
         puts Rainbow(last_words).color("green")
     end 
-    def villain_character_comparison
+    def set_health
         villain_health = health_impact(self.villain, self.villain_gear_used, self.character, self.gear_used)
         character_health = health_impact(self.character, self.gear_used, self.villain, self.villain_gear_used)
-        if villain_health > character_health
-            villain_wins
-        else 
-            character_wins
-        end 
+        # if villain_health > character_health
+        #     villain_wins
+        # else 
+        #     character_wins
+        # end 
+        self.character.health = character_health
+        self.villain.health = villain_health
     end 
     def gear_consequence
         if self.run_away_chosen == true
             run_away
         else 
-            villain_character_comparison
+            # villain_character_comparison
+            set_health
+        end 
+    end 
+    def determine_victor(character_health, villain_health)
+        if villain_health > character_health
+            villain_wins
+        else 
+            character_wins
         end 
     end 
 end 
