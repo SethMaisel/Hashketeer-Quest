@@ -1,2 +1,2 @@
-class Encounter
+class Encounter < ActiveRecord::Base
 end 

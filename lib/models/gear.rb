@@ -1,2 +1,2 @@
-class Gear
+class Gear < ActiveRecord::Base
 end 

@@ -1,2 +1,2 @@
-class Villain
+class Villain < ActiveRecord::Base
 end 

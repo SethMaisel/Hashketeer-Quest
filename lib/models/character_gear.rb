@@ -1,2 +1,2 @@
-class CharacterGear
+class CharacterGear < ActiveRecord::Base
 end 
