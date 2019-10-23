@@ -7,5 +7,5 @@ cli.name_character
 cli.origin_story
 cli.encounter_story
 cli.select_gear
-# cli.gear_consequence(weapon_choice)
-binding.pry
+cli.gear_consequence
+# binding.pry
