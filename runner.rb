@@ -9,6 +9,6 @@ loop do
     cli.encounter_story
     cli.select_gear
     cli.gear_consequence
-    break if cli.prompt.yes?("Do you want to play again?") == false
+    break if TTY::Prompt.new.yes?("Do you want to play again?") == false
 end
 # binding.pry
