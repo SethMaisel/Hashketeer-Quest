@@ -1,5 +1,5 @@
 class CLI
-    attr_accessor :username, :character, :gear_used, :villain, :villain_gear, :villain_gear_used, :character_gear, :encounter, :run_away_chosen
+    attr_accessor :username, :character, :gear_used, :villain, :villain_gear, :villain_gear_used, :character_gear, :encounter, :runaway_chosen
     PROMPT = TTY::Prompt.new
     def initialize()
         @username = nil
@@ -10,7 +10,7 @@ class CLI
         @villain_gear_used = nil
         @character_gear = nil
         @encounter = nil
-        @run_away_chosen = false
+        @runaway_chosen = false
     end 
     def welcome
         puts Rainbow("Welcome to Hashkeeter Quest!").color("green")
@@ -57,7 +57,7 @@ class CLI
         set_villain_gear_used
         puts Rainbow("Encounter").color("green")
     end 
-    def add_run_away_option(gear_options)
+    def add_runaway_option(gear_options)
         gear_options["Run Away"] = 0
     end 
     def select_gear
@@ -66,13 +66,13 @@ class CLI
             Gear.find(character_gear.gear_id)
         end 
         gear_available = create_name_id_hash(gears)
-        add_run_away_option(gear_available)
+        add_runaway_option(gear_available)
         gear_id = PROMPT.select("What weapon will you use in your encounter with the villain ?", gear_available)
         if gear_id != 0
             set_gear(gear_id)
             set_character_gear
         else 
-            self.run_away_chosen = true
+            self.runaway_chosen = true
         end  
     end 
     def damage_calculation(c_or_v_stats, c_or_v_gear)
@@ -90,7 +90,7 @@ class CLI
         overall_damage = damage_calculation(opponent_stats, opponent_gear)
         overall_health - overall_damage
     end 
-    def run_away
+    def runaway
         puts Rainbow("You Bravely Ran Away from the villain").color("green")
     end 
     def character_wins
@@ -115,12 +115,12 @@ class CLI
         self.villain.health = villain_health
     end 
     def gear_consequence
-        if self.run_away_chosen == true
-            run_away
-        else 
+        # if self.runaway_chosen == true
+        #     runaway
+        # else 
             # villain_character_comparison
             set_health
-        end 
+        # end 
     end 
     def determine_victor(character_health, villain_health)
         if villain_health > character_health
