@@ -26,11 +26,11 @@ class CLI
         #user will choose what character to use 
         #character_available will need to contain an array of all the character objects available
         character_available = create_name_id_hash(Character.all)
-        character_id = @prompt.select("Please select a character to play?", character_available)
+        character_id = self.prompt.select("Please select a character to play?", character_available)
         self.character = Character.find(character_id)
     end 
     def name_character
-        self.username = @prompt.ask("What would you like to name your character?")
+        self.username = self.prompt.ask("What would you like to name your character?")
     end 
     def origin_story
         puts Rainbow(self.character.origin).color("green")
@@ -68,7 +68,7 @@ class CLI
         end 
         gear_available = create_name_id_hash(gears)
         add_run_away_option(gear_available)
-        gear_id = @prompt.select("What weapon will you use in your encounter with the villain ?", gear_available)
+        gear_id = self.prompt.select("What weapon will you use in your encounter with the villain ?", gear_available)
         if gear_id != 0
             set_gear(gear_id)
             set_character_gear
@@ -96,12 +96,12 @@ class CLI
     end 
     def character_wins
         puts Rainbow('You Win').color("green")
-        victory_cry = @prompt.ask("What is you victory cry?")
+        victory_cry = self.prompt.ask("What is you victory cry?")
         puts Rainbow(victory_cry).color("green")
     end 
     def villain_wins
         puts Rainbow("villain Wins").color("green")
-        last_words = @prompt.ask("What are your last words?")
+        last_words = self.prompt.ask("What are your last words?")
         puts Rainbow(last_words).color("green")
     end 
     def villain_character_comparison
