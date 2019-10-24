@@ -22,8 +22,6 @@ class CLI
         end 
     end 
     def select_character
-        #user will choose what character to use 
-        #character_available will need to contain an array of all the character objects available
         character_available = create_name_id_hash(Character.all)
         character_id = PROMPT.select("Please select a character to play?", character_available)
         self.character = Character.find(character_id)
@@ -50,7 +48,6 @@ class CLI
         self.character_gear = CharacterGear.find_by(character_id: self.character.id, gear_id: self.gear_used.id)
     end 
     def encounter_story
-        #grab the encounter via character_id
         self.encounter = Encounter.find_by(character_id: self.character.id)
         set_villain
         set_villain_gear
@@ -78,7 +75,8 @@ class CLI
     def damage_calculation(c_or_v_stats, c_or_v_gear)
         attackpower = c_or_v_stats.attack_power
         weapon_damage = c_or_v_gear.damage
-        overall_damage = attackpower * weapon_damage
+        attack_multiplier = rand(1..9)
+        overall_damage = attackpower * weapon_damage * attack_multiplier
     end 
     def character_health_calculation(c_or_v_stats, c_or_v_gear)
         gear_health_stats = c_or_v_gear.add_health
@@ -106,21 +104,16 @@ class CLI
     def set_health
         villain_health = health_impact(self.villain, self.villain_gear_used, self.character, self.gear_used)
         character_health = health_impact(self.character, self.gear_used, self.villain, self.villain_gear_used)
-        # if villain_health > character_health
-        #     villain_wins
-        # else 
-        #     character_wins
-        # end 
         self.character.health = character_health
         self.villain.health = villain_health
     end 
+    def show_health
+        puts Rainbow("Your Health: " + self.character.health.to_s).color("green")
+        puts Rainbow("Villain Health: " + self.villain.health.to_s).color("green")
+    end 
     def gear_consequence
-        # if self.runaway_chosen == true
-        #     runaway
-        # else 
-            # villain_character_comparison
-            set_health
-        # end 
+        set_health
+        show_health
     end 
     def determine_victor(character_health, villain_health)
         if villain_health > character_health
