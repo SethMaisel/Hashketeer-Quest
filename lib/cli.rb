@@ -90,7 +90,7 @@ class CLI
     end 
     def runaway
         puts Rainbow("You Bravely Ran Away from the villain").color("green")
-        self.runaway_chosen = false
+        # self.runaway_chosen = false
     end 
     def character_wins
         puts Rainbow('You Win').color("green")
@@ -122,5 +122,16 @@ class CLI
         else 
             character_wins
         end 
+    end 
+    def self.reset
+        username = nil
+        character = nil
+        gear_used = nil
+        villain = nil
+        villain_gear = nil
+        villain_gear_used = nil
+        character_gear = nil
+        encounter = nil
+        runaway_chosen = false
     end 
 end 
