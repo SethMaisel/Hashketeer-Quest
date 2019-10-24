@@ -78,7 +78,8 @@ class CLI
     def damage_calculation(c_or_v_stats, c_or_v_gear)
         attackpower = c_or_v_stats.attack_power
         weapon_damage = c_or_v_gear.damage
-        overall_damage = attackpower * weapon_damage
+        attack_multiplier = rand(1..6)
+        overall_damage = attackpower * weapon_damage * attack_multiplier
     end 
     def character_health_calculation(c_or_v_stats, c_or_v_gear)
         gear_health_stats = c_or_v_gear.add_health
@@ -106,21 +107,16 @@ class CLI
     def set_health
         villain_health = health_impact(self.villain, self.villain_gear_used, self.character, self.gear_used)
         character_health = health_impact(self.character, self.gear_used, self.villain, self.villain_gear_used)
-        # if villain_health > character_health
-        #     villain_wins
-        # else 
-        #     character_wins
-        # end 
         self.character.health = character_health
         self.villain.health = villain_health
     end 
+    def show_health
+        puts Rainbow("Your Health: " + self.character.health.to_s).color("green")
+        puts Rainbow("Villain Health: " + self.villain.health.to_s).color("green")
+    end 
     def gear_consequence
-        # if self.runaway_chosen == true
-        #     runaway
-        # else 
-            # villain_character_comparison
-            set_health
-        # end 
+        set_health
+        show_health
     end 
     def determine_victor(character_health, villain_health)
         if villain_health > character_health
