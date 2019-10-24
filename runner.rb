@@ -11,7 +11,6 @@ loop do
         cli.select_gear
         cli.gear_consequence
         break if cli.character.health <= 0 || cli.villain.health <= 0 || cli.runaway_chosen == true
-        # binding.pry
     end 
     if cli.runaway_chosen == true
         cli.runaway

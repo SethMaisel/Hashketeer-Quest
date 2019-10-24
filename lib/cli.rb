@@ -65,7 +65,6 @@ class CLI
         gear_available = create_name_id_hash(gears)
         add_runaway_option(gear_available)
         gear_id = PROMPT.select("What weapon will you use in your encounter with the villain ?", gear_available)
-        # binding.pry
         if gear_id == 0
             self.runaway_chosen = true
         else 
@@ -91,6 +90,7 @@ class CLI
     end 
     def runaway
         puts Rainbow("You Bravely Ran Away from the villain").color("green")
+        self.runaway_chosen = false
     end 
     def character_wins
         puts Rainbow('You Win').color("green")
