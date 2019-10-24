@@ -34,7 +34,7 @@ class CLI
     end 
     def origin_story
         standard_message = self.character.origin
-        puts Rainbow(standard_message + "\n").color("green")
+        puts Rainbow(standard_message + "\n").aqua
     end 
     def set_villain
         self.villain = Villain.find(self.encounter.villain_id)
@@ -58,14 +58,14 @@ class CLI
         set_villain_gear_used
 
         if self.character.name == "Knight"
-            standard_message = '"Thank you, sire.” creaks the dispirited voice of the ancient peasant.  He rises slowly and toddles from the great hall, leaning heavily on his gnarled cane.  “Well, username, booms King Kyle, Lord of the Cohorts, what dost thou make of that? Another smallhold ravaged.  ‘Tis high time someone dealt with this Orc menace!  I have decided that someone is to be thee, username.  Sally forth and dispense with the oafish rabble.” With a gracious bow, username dons armor, mounts trusty steed, and rides out from the castle towards the mountains in search of the monsters.  You have barley ascended to the snowy foothills, when you are accosted by the first drooling, stinking monstrosity.  It brandishes a crude weapon and roars as you ride to the fray...'
+            standard_message = "\"Thank you, sire.\” creaks the dispirited voice of the ancient peasant.  He rises slowly and toddles from the great hall, leaning heavily on his gnarled cane.\n\“Well, username, booms King Kyle, Lord of the Cohorts, what dost thou make of that? Another smallhold ravaged.  ‘Tis high time someone dealt with this Orc menace!\nI have decided that someone is to be thee, username.  Sally forth and dispense with the oafish rabble.\”\nWith a gracious bow, username dons armor, mounts trusty steed, and rides out from the castle towards the mountains in search of the monsters.\nYou have barley ascended to the snowy foothills, when you are accosted by the first drooling, stinking monstrosity.  It brandishes a crude weapon and roars as you ride to the fray..."
         elsif self.character.name == "Peasant"
-            standard_message = "Your grandfather, the grey-bearded patriarch of your family, slowly trudges across the blackened and still-smoking field of your small farm.  You rush past the fresh graves of your kin to meet him.  “Well?  How did the Lord respond to your plea?”, you query.  “Will he send his forces out to meet the threat?” “I think not, username.”, pants the old man.  “He received me with cold courtesy and dismissed me without promise or comfort.” That clinches it!  It is time for you, username, the last of your family still able to heft the great axe of your forefathers, to take matters into your own hands. With a bag full of restorative - an old family secret that improves vitality (and, incidentally, grants a feeling of pleasant euphoria) - you stalk determinedly into the nearby mountains. Soon, you are overwhelmed by a hideous stench.  As the beast leaps from behind a convenient boulder, you shout, “Hello! My name is username!  Killed my father!  Prepare to die!”. It roars in response as you stride confidently to battle…"
+            standard_message = "Your grandfather, the grey-bearded patriarch of your family, slowly trudges across the blackened and still-smoking field of your small farm. You rush past the fresh graves of your kin to meet him.\n“Well?  How did the Lord respond to your plea?”, you query.  “Will he send his forces out to meet the threat?”\n“I think not, username.”, pants the old man. “He received me with cold courtesy and dismissed me without promise or comfort.”\nThat clinches it!  It is time for you, username, the last of your family still able to heft the great axe of your forefathers, to take matters into your own hands.\nWith a bag full of restorative - an old family secret that improves vitality (and, incidentally, grants a feeling of pleasant euphoria) - you stalk determinedly into the nearby mountains.\nSoon, you are overwhelmed by a hideous stench.  As the beast leaps from behind a convenient boulder, you shout, “Hello! My name is username!  Killed my father!  Prepare to die!”. It roars in response as you stride confidently to battle…"
         elsif self.character.name == "Monster"
-            standard_message = "username skulked back to the cave after another unsuccessful hunt.  To call it a cave was exaggeration, had username known the word.  It was really a shallow ditch, clawed out of the hard ground of the foothills.  Still, it was home.  Had been for years.  Ever since username was exiled from the clan for witchcraft. Everyorc knew that after the number “three” came the incalculable “many”.  username counted to “four”.  That qualified as higher math and, as all know, math is witchcraft. Enough of that!  username grows tired of counting piles of rocks and eating raw squirrel.  The time has come to return to the clan.  To lead them to the bright new future of “four”! Unfortunately, the only path back to the clan is a road paved with orc skulls. username lifts the great warhammer, crafted out of an uprooted tree (roots and all) and a big rock, and stomps towards the first orc username sees…"
+            standard_message = "username skulked back to the cave after another unsuccessful hunt. To call it a cave was exaggeration, had username known the word. It was really a shallow ditch, clawed out of the hard ground of the foothills.  Still, it was home. Had been for years. Ever since username was exiled from the clan for witchcraft.\nEveryorc knew that after the number “three” came the incalculable “many”. username counted to “four”. That qualified as higher math and, as all know, math is witchcraft.\nEnough of that!  username grows tired of counting piles of rocks and eating raw squirrel! The time has come to return to the clan. To lead them to the bright new future of “four”! Unfortunately, the only path back to the clan is a road paved with orc skulls.\nusername lifts the great warhammer, crafted out of an uprooted tree (roots and all) and a big rock, and stomps towards the first orc username sees…"
         end 
         replace_username = customize_message(standard_message, "username", self.username)
-        puts Rainbow(replace_username + "\n").color("green")
+        puts Rainbow(replace_username + "\n").green
     end 
     def add_runaway_option(gear_options)
         gear_options["Run Away"] = 0
@@ -102,24 +102,24 @@ class CLI
         overall_health - overall_damage
     end 
     def runaway
-        standard_message = "Brave username ran away!  Bravely ran away, away.  When danger reared its ugly head, you bravely turned your tail and fled.  Yes brave username turned about and gallantly, you chickened out.  Bravely taking to your feet, you beat a very brave retreat.  Yes, bravest of the brave, username."
+        standard_message = "Brave username ran away!  Bravely ran away, away.\nWhen danger reared its ugly head, you bravely turned your tail and fled. Yes, brave username turned about and gallantly, you chickened out.\nBravely taking to your feet, you beat a very brave retreat.\nYes, bravest of the brave, username."
         new_message = customize_message(standard_message, "username", self.username)
-        puts Rainbow(new_message).color("green")
+        puts Rainbow(new_message).red
         self.runaway_chosen = false
     end 
     def character_wins
-        puts Rainbow("You Won!").color("green")
+        puts Rainbow("You Won!").green
         victory_cry = PROMPT.ask("What is you victory cry?")
         standard_message = self.character.winning_text
         replace_username = customize_message(standard_message, "username", self.username)
         replace_victorycry = customize_message(replace_username, "victorycry", victory_cry)
-        puts Rainbow(replace_victorycry + "\n").color("green")
+        puts Rainbow(replace_victorycry + "\n").yellow
     end 
     def villain_wins
-        puts Rainbow("Villain Wins").color("green")
+        puts Rainbow("Villain Wins").red
         last_words = PROMPT.ask("What are your last words?")
         replace_lastwords = customize_message(self.villain.winning_text, "lastwords", last_words)
-        puts Rainbow(replace_lastwords + "\n").color("green")
+        puts Rainbow(replace_lastwords + "\n").red
     end 
     def set_health
         villain_health = health_impact(self.villain, self.villain_gear_used, self.character, self.gear_used)
