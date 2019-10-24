@@ -29,8 +29,12 @@ class CLI
     def name_character
         self.username = PROMPT.ask("What would you like to name your character?")
     end 
+    def customize_message(original_message, replace, replacement)
+        original_message.gsub replace, replacement
+    end 
     def origin_story
-        puts Rainbow(self.character.origin).color("green")
+        standard_message = self.character.origin
+        puts Rainbow(standard_message + "\n").color("green")
     end 
     def set_villain
         self.villain = Villain.find(self.encounter.villain_id)
@@ -52,7 +56,16 @@ class CLI
         set_villain
         set_villain_gear
         set_villain_gear_used
-        puts Rainbow("Encounter").color("green")
+
+        if self.character.name == "Knight"
+            standard_message = '"Thank you, sire.” creaks the dispirited voice of the ancient peasant.  He rises slowly and toddles from the great hall, leaning heavily on his gnarled cane.  “Well, username, booms King Kyle, Lord of the Cohorts, what dost thou make of that? Another smallhold ravaged.  ‘Tis high time someone dealt with this Orc menace!  I have decided that someone is to be thee, username.  Sally forth and dispense with the oafish rabble.” With a gracious bow, username dons armor, mounts trusty steed, and rides out from the castle towards the mountains in search of the monsters.  You have barley ascended to the snowy foothills, when you are accosted by the first drooling, stinking monstrosity.  It brandishes a crude weapon and roars as you ride to the fray...'
+        elsif self.character.name == "Peasant"
+            standard_message = "Your grandfather, the grey-bearded patriarch of your family, slowly trudges across the blackened and still-smoking field of your small farm.  You rush past the fresh graves of your kin to meet him.  “Well?  How did the Lord respond to your plea?”, you query.  “Will he send his forces out to meet the threat?” “I think not, username.”, pants the old man.  “He received me with cold courtesy and dismissed me without promise or comfort.” That clinches it!  It is time for you, username, the last of your family still able to heft the great axe of your forefathers, to take matters into your own hands. With a bag full of restorative - an old family secret that improves vitality (and, incidentally, grants a feeling of pleasant euphoria) - you stalk determinedly into the nearby mountains. Soon, you are overwhelmed by a hideous stench.  As the beast leaps from behind a convenient boulder, you shout, “Hello! My name is username!  Killed my father!  Prepare to die!”. It roars in response as you stride confidently to battle…"
+        elsif self.character.name == "Monster"
+            standard_message = "username skulked back to the cave after another unsuccessful hunt.  To call it a cave was exaggeration, had username known the word.  It was really a shallow ditch, clawed out of the hard ground of the foothills.  Still, it was home.  Had been for years.  Ever since username was exiled from the clan for witchcraft. Everyorc knew that after the number “three” came the incalculable “many”.  username counted to “four”.  That qualified as higher math and, as all know, math is witchcraft. Enough of that!  username grows tired of counting piles of rocks and eating raw squirrel.  The time has come to return to the clan.  To lead them to the bright new future of “four”! Unfortunately, the only path back to the clan is a road paved with orc skulls. username lifts the great warhammer, crafted out of an uprooted tree (roots and all) and a big rock, and stomps towards the first orc username sees…"
+        end 
+        replace_username = customize_message(standard_message, "username", self.username)
+        puts Rainbow(replace_username + "\n").color("green")
     end 
     def add_runaway_option(gear_options)
         gear_options["Run Away"] = 0
@@ -89,18 +102,24 @@ class CLI
         overall_health - overall_damage
     end 
     def runaway
-        puts Rainbow("You Bravely Ran Away from the villain").color("green")
-        # self.runaway_chosen = false
+        standard_message = "Brave username ran away!  Bravely ran away, away.  When danger reared its ugly head, you bravely turned your tail and fled.  Yes brave username turned about and gallantly, you chickened out.  Bravely taking to your feet, you beat a very brave retreat.  Yes, bravest of the brave, username."
+        new_message = customize_message(standard_message, "username", self.username)
+        puts Rainbow(new_message).color("green")
+        self.runaway_chosen = false
     end 
     def character_wins
-        puts Rainbow('You Win').color("green")
+        puts Rainbow("You Won!").color("green")
         victory_cry = PROMPT.ask("What is you victory cry?")
-        puts Rainbow(victory_cry).color("green")
+        standard_message = self.character.winning_text
+        replace_username = customize_message(standard_message, "username", self.username)
+        replace_victorycry = customize_message(replace_username, "victorycry", victory_cry)
+        puts Rainbow(replace_victorycry + "\n").color("green")
     end 
     def villain_wins
-        puts Rainbow("villain Wins").color("green")
+        puts Rainbow("Villain Wins").color("green")
         last_words = PROMPT.ask("What are your last words?")
-        puts Rainbow(last_words).color("green")
+        replace_lastwords = customize_message(self.villain.winning_text, "lastwords", last_words)
+        puts Rainbow(replace_lastwords + "\n").color("green")
     end 
     def set_health
         villain_health = health_impact(self.villain, self.villain_gear_used, self.character, self.gear_used)
@@ -109,8 +128,8 @@ class CLI
         self.villain.health = villain_health
     end 
     def show_health
-        puts Rainbow("Your Health: " + self.character.health.to_s).color("green")
-        puts Rainbow("Villain Health: " + self.villain.health.to_s).color("green")
+        puts Rainbow("\n" + "Your Health: " + self.character.health.to_s).color("green")
+        puts Rainbow("Villain Health: " + self.villain.health.to_s + "\n").color("green")
     end 
     def gear_consequence
         set_health
