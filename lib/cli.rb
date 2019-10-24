@@ -65,11 +65,12 @@ class CLI
         gear_available = create_name_id_hash(gears)
         add_runaway_option(gear_available)
         gear_id = PROMPT.select("What weapon will you use in your encounter with the villain ?", gear_available)
-        if gear_id != 0
+        # binding.pry
+        if gear_id == 0
+            self.runaway_chosen = true
+        else 
             set_gear(gear_id)
             set_character_gear
-        else 
-            self.runaway_chosen = true
         end  
     end 
     def damage_calculation(c_or_v_stats, c_or_v_gear)
