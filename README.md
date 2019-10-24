@@ -1,7 +1,4 @@
-# Seth-Samantha-CLI-App
-Our super cool RPG (probably)
-
-short description of program 
+Hashketeer Quest
 
 Installation Requirement: 
 
