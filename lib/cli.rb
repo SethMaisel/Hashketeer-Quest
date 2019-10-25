@@ -27,7 +27,7 @@ class CLI
         self.character = Character.find(character_id)
     end 
     def name_character
-        self.username = PROMPT.ask("What would you like to name your character?")
+        self.username = PROMPT.ask("What would you like to name your character?").capitalize
     end 
     def customize_message(original_message, replace, replacement)
         original_message.gsub replace, replacement
