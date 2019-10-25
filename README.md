@@ -1,5 +1,7 @@
 Hashketeer Quest
 
+A video description of this program can be found here: https://www.youtube.com/watch?v=bKus_VuM95c&feature=youtu.be
+
 Installation Requirement: 
 
 In order to run the application you will need the following Ruby gems: activerecord, sqlite3, sinatra, sinatra-activerecord, require_all, pry, tty-prompt, and rainbow.
